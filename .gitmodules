@@ -1,0 +1,3 @@
+[submodule "fa"]
+	path = fa
+	url = https://github.com/k1LoW/fa.git
