@@ -54,11 +54,13 @@
 	  actual: null,
 	  allowPattern: [],
 	  formats: [],
+	  message: [],
 	  set: function(value) {
 	    if (value != undefined) {
 	      this.actual = value;
 	      this.allowPattern = [];
 	      this.formats = [];
+	      this.message = [];
 	    }
 	    return this;
 	  },
@@ -85,13 +87,19 @@
 	    var replaced = self.actual;
 	    var checked = true;
 
-	    self.allowPattern.forEach(function(re) {
+	    self.allowPattern.forEach(function(pattern) {
+	      var re = pattern[1];
 	      replaced = replaced.replace(re, '');
+	      if (replaced != '') {
+	        self.message.push(pattern[0]);
+	      }
 	    });
 
-	    self.formats.forEach(function(re) {
+	    self.formats.forEach(function(pattern) {
+	      var re = pattern[1];
 	      if (!self.actual.match(re)) {
 	        checked = false;
+	        self.message.push(pattern[0]);
 	      }
 	    });
 
@@ -105,84 +113,84 @@
 	  // allows
 	  alpha: function(value) {
 	    this.set(value);
-	    this.allowPattern.push(/[a-zA-Z]/g);
+	    this.allowPattern.push(['alpha', /[a-zA-Z]/g]);
 	    return this;
 	  },
 	  digit: function(value) {
 	    this.set(value);
-	    this.allowPattern.push(/[0-9]/g);
+	    this.allowPattern.push(['digit', /[0-9]/g]);
 	    return this;
 	  },
 	  space: function(value) {
 	    this.set(value);
-	    this.allowPattern.push(/[ ]/g);
+	    this.allowPattern.push(['space', /[ ]/g]);
 	    return this;
 	  },
 	  symbol: function(value) {
 	    this.set(value);
-	    this.allowPattern.push(/[!-/:-@≠\[-`{-~]/g);
+	    this.allowPattern.push(['symbol', /[!-/:-@≠\[-`{-~]/g]);
 	    return this;
 	  },
 	  hyphen: function(value) {
 	    this.set(value);
-	    this.allowPattern.push(/[-]/g);
+	    this.allowPattern.push(['hyphen', /[-]/g]);
 	    return this;
 	  },
 	  zenkaku: function(value) {
 	    this.set(value);
-	    this.allowPattern.push(/[^ -~｡-ﾟ0-9a-zA-Z]/g);
+	    this.allowPattern.push(['zenkaku', /[^ -~｡-ﾟ0-9a-zA-Z]/g]);
 	    return this;
 	  },
 	  hiragana: function(value) {
 	    this.set(value);
-	    this.allowPattern.push(/[ぁ-んー]/g);
+	    this.allowPattern.push(['hiragana', /[ぁ-んー]/g]);
 	    return this;
 	  },
 	  katakana: function(value) {
 	    this.set(value);
-	    this.allowPattern.push(/[ァ-ンーヴヵヶ]/g);
+	    this.allowPattern.push(['katakana', /[ァ-ンーヴヵヶ]/g]);
 	    return this;
 	  },
 	  zenkaku_alpha: function(value) {
 	    this.set(value);
-	    this.allowPattern.push(/[ａ-ｚＡ-Ｚ]/g);
+	    this.allowPattern.push(['zenkaku_alpha', /[ａ-ｚＡ-Ｚ]/g]);
 	    return this;
 	  },
 	  zenkaku_digit: function(value) {
 	    this.set(value);
-	    this.allowPattern.push(/[０-９]/g);
+	    this.allowPattern.push(['zenkaku_digit', /[０-９]/g]);
 	    return this;
 	  },
 	  zenkaku_space: function(value) {
 	    this.set(value);
-	    this.allowPattern.push(/[　]/g);
+	    this.allowPattern.push(['zenkaku_space', /[　]/g]);
 	    return this;
 	  },
 	  zenkaku_symbol: function(value) {
 	    this.set(value);
-	    this.allowPattern.push(/[！”＃＄％＆’（）＝～｜‘｛＋＊｝＜＞？＿－＾￥＠「；：」、。・]/g);
+	    this.allowPattern.push(['zenkaku_symbol', /[！”＃＄％＆’（）＝～｜‘｛＋＊｝＜＞？＿－＾￥＠「；：」、。・]/g]);
 	    return this;
 	  },
 	  zenkaku_hyphen: function(value) {
 	    this.set(value);
-	    this.allowPattern.push(/[‐]/g);
+	    this.allowPattern.push(['zenkaku_hyphen', /[‐]/g]);
 	    return this;
 	  },
 	  zenkaku_hyphen_fuzzy: function(value) {
 	    this.set(value);
-	    this.allowPattern.push(/[－‐−‒—–―ー─━]/g);
+	    this.allowPattern.push(['zenkaku_hyphen_fuzzy', /[－‐−‒—–―ー─━]/g]);
 	    return this;
 	  },
 	  
 	  // formats
 	  notEmpty: function(value) {
 	    this.set(value);
-	    this.formats.push(/^.+$/);
+	    this.formats.push(['notEmpty', /^.+$/]);
 	    return this;
 	  },
 	  int: function(value) {
 	    this.set(value);
-	    this.formats.push(/^-?[1-9]*[0-9]+$/);
+	    this.formats.push(['int', /^-?[1-9]*[0-9]+$/]);
 	    return this;
 	  },
 	  range: function(value, range) {
@@ -192,17 +200,17 @@
 	      this.set(value);
 	    }
 	    var regex = RegExp('^.{' + range +'}$');
-	    this.formats.push(regex);
+	    this.formats.push(['range', regex]);
 	    return this;
 	  },
 	  email: function(value) {
 	    this.set(value);
-	    this.formats.push(/^[a-z0-9\.!#$%&'*+\/=?^_`{|}~-]+(?:\.[a-z0-9\.!#$%&'*+\/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+(?:[a-z]{2,4}|museum|travel)$/i);
+	    this.formats.push(['email', /^[a-z0-9\.!#$%&'*+\/=?^_`{|}~-]+(?:\.[a-z0-9\.!#$%&'*+\/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+(?:[a-z]{2,4}|museum|travel)$/i]);
 	    return this;
 	  },
 	  zipcode: function(value) {
 	    this.set(value);
-	    this.formats.push(/^[0-9]{3}-[0-9]{4}$/);
+	    this.formats.push(['zipcode', /^[0-9]{3}-[0-9]{4}$/]);
 	    return this;
 	  }
 	};
