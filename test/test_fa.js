@@ -147,4 +147,13 @@ describe('fa.check', function(){
       });
   });
 
+  it('should check email', function(){
+      var testset = yaml.safeLoad(fs.readFileSync(TESTSET_DIR + 'email.yml', 'utf8'));
+      testset.forEach(function(entry) {
+          expect(fa.set(entry['input']).email().assert()).to.eq(entry['expect']);
+
+          expect(fa.email(entry['input']).assert()).to.eq(entry['expect']);
+      });
+  });
+
 });

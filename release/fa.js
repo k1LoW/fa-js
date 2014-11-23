@@ -194,6 +194,11 @@
 	        var regex = RegExp('^.{' + range +'}$');
 	        this.formats.push(regex);
 	        return this;
+	    },
+	    email: function(value) {
+	        this.set(value);
+	        this.formats.push(/^[a-z0-9\.!#$%&'*+\/=?^_`{|}~-]+(?:\.[a-z0-9\.!#$%&'*+\/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+(?:[a-z]{2,4}|museum|travel)$/i);
+	        return this;
 	    }
 	};
 
