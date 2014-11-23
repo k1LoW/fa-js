@@ -115,7 +115,18 @@ describe('fa.allow', function(){
           expect(fa.set(entry['input']).zenkaku_symbol().assert()).to.eq(entry['expect']);
       });
   });
-    
+
+  it('should assert alphanumeric', function(){
+      var testset = yaml.safeLoad(fs.readFileSync(TESTSET_DIR + 'alphanumeric.yml', 'utf8'));
+      testset.forEach(function(entry) {
+        expect(fa.set(entry['input']).allow('alpha+digit').assert()).to.eq(entry['expect']);
+
+        expect(fa.set(entry['input']).allow(['alpha','digit']).assert()).to.eq(entry['expect']);
+
+        expect(fa.set(entry['input']).alpha().digit().assert()).to.eq(entry['expect']);
+      });
+  });
+  
 });
 
 describe('fa.check', function(){
@@ -129,12 +140,12 @@ describe('fa.check', function(){
       });
   });
 
-  it('should check numeric', function(){
-      var testset = yaml.safeLoad(fs.readFileSync(TESTSET_DIR + 'numeric.yml', 'utf8'));
+  it('should check int', function(){
+      var testset = yaml.safeLoad(fs.readFileSync(TESTSET_DIR + 'int.yml', 'utf8'));
       testset.forEach(function(entry) {
-          expect(fa.set(entry['input']).numeric().assert()).to.eq(entry['expect']);
+          expect(fa.set(entry['input']).int().assert()).to.eq(entry['expect']);
 
-          expect(fa.numeric(entry['input']).assert()).to.eq(entry['expect']);
+          expect(fa.int(entry['input']).assert()).to.eq(entry['expect']);
       });
   });
 
