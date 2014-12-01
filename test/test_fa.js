@@ -2,7 +2,7 @@ var fs = require('fs');
 var files = fs.readdirSync('lib');
 var expect = require('chai').expect;
 var yaml = require('js-yaml');
-var fa = require('./../lib/fa'); // test release build
+var fa = require('./../release/fa'); // test release build
 
 var TESTSET_DIR = __dirname + '/../fa/testsets/';
 

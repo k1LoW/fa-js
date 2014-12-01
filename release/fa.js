@@ -241,7 +241,7 @@
 
 	module.exports = {
 		"name": "fa",
-		"version": "0.0.0",
+		"version": "0.0.1",
 		"description": "String assert for form japanese",
 		"main": "release/fa.js",
 		"devDependencies": {
@@ -251,7 +251,7 @@
 			"should": "~1.2.2",
 			"uglify-js": "*",
 			"webpack": "*",
-			"json-loader": "*"
+			"json-loader": "~0.5.1"
 		},
 		"scripts": {
 			"test": "mocha --require should test/*.js",
