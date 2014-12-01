@@ -47,31 +47,44 @@
 /* 0 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var package_info = __webpack_require__(1);
+	var package_info = __webpack_require__(3);
+	var fa_chars = __webpack_require__(1);
+	var fa_formats = __webpack_require__(2);
 
 	var fa = {
 	  VERSION: package_info.version,
 	  actual: null,
-	  allowPattern: [],
-	  formats: [],
+	  allowChars: [],
+	  checkFormats: [],
 	  message: [],
+	  charSets: fa_chars,
 	  set: function(value) {
 	    if (value != undefined) {
 	      this.actual = value;
-	      this.allowPattern = [];
-	      this.formats = [];
+	      this.allowChars = [];
+	      this.checkFormats = [];
 	      this.message = [];
 	    }
 	    return this;
 	  },
-	  allow: function(patterns) {
+	  char: function(patterns) {
 	    var self = this;
-	    if (this.is('String', patterns)) {
-	      if (patterns.match(/\+/)) {
-	        patterns = patterns.split('+');
-	      } else {
-	        patterns = [patterns];
-	      }
+	    if (patterns.match(/\+/)) {
+	      patterns = patterns.split('+');
+	    } else {
+	      patterns = [patterns];
+	    }
+	    patterns.forEach(function(pattern) {
+	      self.allowChars.push(pattern);
+	    });
+	    return this;
+	  },
+	  format: function(patterns) {
+	    var self = this;
+	    if (patterns.match(/\+/)) {
+	      patterns = patterns.split('+');
+	    } else {
+	      patterns = [patterns];
 	    }
 	    patterns.forEach(function(pattern) {
 	      self[pattern]();
@@ -87,15 +100,12 @@
 	    var replaced = self.actual;
 	    var checked = true;
 
-	    self.allowPattern.forEach(function(pattern) {
-	      var re = pattern[1];
+	    self.allowChars.forEach(function(pattern) {
+	      var re = self.charSets[pattern]();
 	      replaced = replaced.replace(re, '');
-	      if (replaced != '') {
-	        self.message.push(pattern[0]);
-	      }
 	    });
 
-	    self.formats.forEach(function(pattern) {
+	    self.checkFormats.forEach(function(pattern) {
 	      var re = pattern[1];
 	      if (!self.actual.match(re)) {
 	        checked = false;
@@ -103,94 +113,96 @@
 	      }
 	    });
 
-	    if (self.allowPattern.length > 0 && replaced != '') {
+	    if (self.allowChars.length > 0 && replaced != '') {
 	      checked = false;
+	      self.message.push('allowChars');
 	    }
 
 	    return checked;
-	  },
+	  }
+	};
 
-	  // allows
+	var merge = function (a, b) {
+	  for (key in b) {
+	    if (b.hasOwnProperty(key)) {
+	      a[key] = b[key];
+	    }
+	  }
+	  return a;
+	};
+
+	fa = merge(fa, fa_formats);
+
+	module.exports = fa;
+
+
+/***/ },
+/* 1 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var fa_chars = {
+	  // chars
 	  alpha: function(value) {
-	    this.set(value);
-	    this.allowPattern.push(['alpha', /[a-zA-Z]/g]);
-	    return this;
+	    return  /[a-zA-Z]/g;
 	  },
 	  digit: function(value) {
-	    this.set(value);
-	    this.allowPattern.push(['digit', /[0-9]/g]);
-	    return this;
+	    return /[0-9]/g;
 	  },
 	  space: function(value) {
-	    this.set(value);
-	    this.allowPattern.push(['space', /[ ]/g]);
-	    return this;
+	    return /[ ]/g;
 	  },
 	  symbol: function(value) {
-	    this.set(value);
-	    this.allowPattern.push(['symbol', /[!-/:-@≠\[-`{-~]/g]);
-	    return this;
+	    return /[!-/:-@≠\[-`{-~]/g;
 	  },
 	  hyphen: function(value) {
-	    this.set(value);
-	    this.allowPattern.push(['hyphen', /[-]/g]);
-	    return this;
+	    return /[-]/g;
 	  },
 	  zenkaku: function(value) {
-	    this.set(value);
-	    this.allowPattern.push(['zenkaku', /[^ -~｡-ﾟ0-9a-zA-Z]/g]);
-	    return this;
+	    return /[^ -~｡-ﾟ0-9a-zA-Z]/g;
 	  },
 	  hiragana: function(value) {
-	    this.set(value);
-	    this.allowPattern.push(['hiragana', /[ぁ-んー]/g]);
-	    return this;
+	    return /[ぁ-んー]/g;
 	  },
 	  katakana: function(value) {
-	    this.set(value);
-	    this.allowPattern.push(['katakana', /[ァ-ンーヴヵヶ]/g]);
-	    return this;
+	    return /[ァ-ンーヴヵヶ]/g;
 	  },
 	  zenkaku_alpha: function(value) {
-	    this.set(value);
-	    this.allowPattern.push(['zenkaku_alpha', /[ａ-ｚＡ-Ｚ]/g]);
-	    return this;
+	    return /[ａ-ｚＡ-Ｚ]/g;
 	  },
 	  zenkaku_digit: function(value) {
-	    this.set(value);
-	    this.allowPattern.push(['zenkaku_digit', /[０-９]/g]);
-	    return this;
+	    return /[０-９]/g;
 	  },
 	  zenkaku_space: function(value) {
-	    this.set(value);
-	    this.allowPattern.push(['zenkaku_space', /[　]/g]);
-	    return this;
+	    return /[　]/g;
 	  },
 	  zenkaku_symbol: function(value) {
-	    this.set(value);
-	    this.allowPattern.push(['zenkaku_symbol', /[！”＃＄％＆’（）＝～｜‘｛＋＊｝＜＞？＿－＾￥＠「；：」、。・]/g]);
-	    return this;
+	    return /[！”＃＄％＆’（）＝～｜‘｛＋＊｝＜＞？＿－＾￥＠「；：」、。・]/g;
 	  },
 	  zenkaku_hyphen: function(value) {
-	    this.set(value);
-	    this.allowPattern.push(['zenkaku_hyphen', /[‐]/g]);
-	    return this;
+	    return /[‐]/g;
 	  },
 	  zenkaku_hyphen_fuzzy: function(value) {
-	    this.set(value);
-	    this.allowPattern.push(['zenkaku_hyphen_fuzzy', /[－‐−‒—–―ー─━]/g]);
-	    return this;
-	  },
-	  
+	    return /[－‐−‒—–―ー─━]/g;
+	  }
+	};
+
+	module.exports = fa_chars;
+
+
+/***/ },
+/* 2 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var fa_formats = {
 	  // formats
 	  notEmpty: function(value) {
 	    this.set(value);
-	    this.formats.push(['notEmpty', /^.+$/]);
+	    this.checkFormats.push(['notEmpty', /^.+$/]);
 	    return this;
 	  },
 	  int: function(value) {
 	    this.set(value);
-	    this.formats.push(['int', /^-?[1-9]*[0-9]+$/]);
+	    this.checkFormats.push(['int', /^-?[1-9]*[0-9]+$/]);
 	    return this;
 	  },
 	  range: function(value, range) {
@@ -200,26 +212,31 @@
 	      this.set(value);
 	    }
 	    var regex = RegExp('^.{' + range +'}$');
-	    this.formats.push(['range', regex]);
+	    this.checkFormats.push(['range', regex]);
 	    return this;
 	  },
 	  email: function(value) {
 	    this.set(value);
-	    this.formats.push(['email', /^[a-z0-9\.!#$%&'*+\/=?^_`{|}~-]+(?:\.[a-z0-9\.!#$%&'*+\/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+(?:[a-z]{2,4}|museum|travel)$/i]);
+	    this.checkFormats.push(['email', /^[a-z0-9\.!#$%&'*+\/=?^_`{|}~-]+(?:\.[a-z0-9\.!#$%&'*+\/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+(?:[a-z]{2,4}|museum|travel)$/i]);
 	    return this;
 	  },
 	  zipcode: function(value) {
 	    this.set(value);
-	    this.formats.push(['zipcode', /^[0-9]{3}-[0-9]{4}$/]);
+	    this.checkFormats.push(['zipcode', /^[0-9]{3}-[0-9]{4}$/]);
+	    return this;
+	  },
+	  telNo: function(value) {
+	    this.set(value);
+	    this.checkFormats.push(['telNo', /^[0-9]{2}[0-9]*-[0-9]*-[0-9]{4}$/]);
 	    return this;
 	  }
 	};
 
-	module.exports = fa;
+	module.exports = fa_formats;
 
 
 /***/ },
-/* 1 */
+/* 3 */
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports = {
