@@ -104,7 +104,7 @@ describe('fa.chars', function(){
 describe('fa.format', function(){
   
   it('should format notEmpty', function(){
-    var testset = yaml.safeLoad(fs.readFileSync(TESTSET_DIR + 'not_empty.yml', 'utf8'));
+    var testset = yaml.safeLoad(fs.readFileSync(TESTSET_DIR + 'notEmpty.yml', 'utf8'));
     testset.forEach(function(entry) {
       expect(fa.set(entry['input']).format('notEmpty').assert()).to.eq(entry['expect']);
       expect(fa.notEmpty(entry['input']).assert()).to.eq(entry['expect']);

@@ -57,7 +57,7 @@
 	  allowChars: [],
 	  checkFormats: [],
 	  message: [],
-	  charSets: fa_chars,
+	  chars: fa_chars,
 	  set: function(value) {
 	    if (value != undefined) {
 	      this.actual = value;
@@ -101,7 +101,7 @@
 	    var checked = true;
 
 	    self.allowChars.forEach(function(pattern) {
-	      var re = self.charSets[pattern]();
+	      var re = self.chars[pattern]();
 	      replaced = replaced.replace(re, '');
 	    });
 
@@ -115,7 +115,7 @@
 
 	    if (self.allowChars.length > 0 && replaced != '') {
 	      checked = false;
-	      self.message.push('allowChars');
+	      self.message.push('chars');
 	    }
 
 	    return checked;
