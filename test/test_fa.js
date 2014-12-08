@@ -12,6 +12,9 @@ describe('fa.chars', function(){
     var testset = yaml.safeLoad(fs.readFileSync(TESTSET_DIR + 'alpha.yml', 'utf8'));
     testset.forEach(function(entry) {
       expect(fa.set(entry['input']).char('alpha').assert()).to.eq(entry['expect']);
+      if (!entry['expect']) {
+        expect(fa.message[0]).to.eq('char');
+      }
     });
   });
   
@@ -19,6 +22,9 @@ describe('fa.chars', function(){
     var testset = yaml.safeLoad(fs.readFileSync(TESTSET_DIR + 'digit.yml', 'utf8'));
     testset.forEach(function(entry) {
       expect(fa.set(entry['input']).char('digit').assert()).to.eq(entry['expect']);
+      if (!entry['expect']) {
+        expect(fa.message[0]).to.eq('char');
+      }
     });
   });
 
@@ -26,6 +32,9 @@ describe('fa.chars', function(){
     var testset = yaml.safeLoad(fs.readFileSync(TESTSET_DIR + 'space.yml', 'utf8'));
     testset.forEach(function(entry) {
       expect(fa.set(entry['input']).char('space').assert()).to.eq(entry['expect']);
+      if (!entry['expect']) {
+        expect(fa.message[0]).to.eq('char');
+      }
     });
   });
   
@@ -33,6 +42,9 @@ describe('fa.chars', function(){
     var testset = yaml.safeLoad(fs.readFileSync(TESTSET_DIR + 'symbol.yml', 'utf8'));
     testset.forEach(function(entry) {
       expect(fa.set(entry['input']).char('symbol').assert()).to.eq(entry['expect']);
+      if (!entry['expect']) {
+        expect(fa.message[0]).to.eq('char');
+      }
     });
   });
 
@@ -40,6 +52,9 @@ describe('fa.chars', function(){
     var testset = yaml.safeLoad(fs.readFileSync(TESTSET_DIR + 'hyphen.yml', 'utf8'));
     testset.forEach(function(entry) {
       expect(fa.set(entry['input']).char('hyphen').assert()).to.eq(entry['expect']);
+      if (!entry['expect']) {
+        expect(fa.message[0]).to.eq('char');
+      }
     });
   });
   
@@ -47,6 +62,9 @@ describe('fa.chars', function(){
     var testset = yaml.safeLoad(fs.readFileSync(TESTSET_DIR + 'zenkaku.yml', 'utf8'));
     testset.forEach(function(entry) {
       expect(fa.set(entry['input']).char('zenkaku').assert()).to.eq(entry['expect']);
+      if (!entry['expect']) {
+        expect(fa.message[0]).to.eq('char');
+      }
     });
   });
 
@@ -54,6 +72,9 @@ describe('fa.chars', function(){
     var testset = yaml.safeLoad(fs.readFileSync(TESTSET_DIR + 'hiragana.yml', 'utf8'));
     testset.forEach(function(entry) {
       expect(fa.set(entry['input']).char('hiragana').assert()).to.eq(entry['expect']);
+      if (!entry['expect']) {
+        expect(fa.message[0]).to.eq('char');
+      }
     });
   });
 
@@ -61,6 +82,9 @@ describe('fa.chars', function(){
     var testset = yaml.safeLoad(fs.readFileSync(TESTSET_DIR + 'katakana.yml', 'utf8'));
     testset.forEach(function(entry) {
       expect(fa.set(entry['input']).char('katakana').assert()).to.eq(entry['expect']);
+      if (!entry['expect']) {
+        expect(fa.message[0]).to.eq('char');
+      }
     });
   });
 
@@ -68,6 +92,9 @@ describe('fa.chars', function(){
     var testset = yaml.safeLoad(fs.readFileSync(TESTSET_DIR + 'zenkaku_alpha.yml', 'utf8'));
     testset.forEach(function(entry) {
       expect(fa.set(entry['input']).char('zenkaku_alpha').assert()).to.eq(entry['expect']);
+      if (!entry['expect']) {
+        expect(fa.message[0]).to.eq('char');
+      }
     });
   });
 
@@ -75,6 +102,9 @@ describe('fa.chars', function(){
     var testset = yaml.safeLoad(fs.readFileSync(TESTSET_DIR + 'zenkaku_digit.yml', 'utf8'));
     testset.forEach(function(entry) {
       expect(fa.set(entry['input']).char('zenkaku_digit').assert()).to.eq(entry['expect']);
+      if (!entry['expect']) {
+        expect(fa.message[0]).to.eq('char');
+      }
     });
   });
   
@@ -82,6 +112,9 @@ describe('fa.chars', function(){
     var testset = yaml.safeLoad(fs.readFileSync(TESTSET_DIR + 'zenkaku_space.yml', 'utf8'));
     testset.forEach(function(entry) {
       expect(fa.set(entry['input']).char('zenkaku_space').assert()).to.eq(entry['expect']);
+      if (!entry['expect']) {
+        expect(fa.message[0]).to.eq('char');
+      }
     });
   });
 
@@ -89,6 +122,9 @@ describe('fa.chars', function(){
     var testset = yaml.safeLoad(fs.readFileSync(TESTSET_DIR + 'zenkaku_symbol.yml', 'utf8'));
     testset.forEach(function(entry) {
       expect(fa.set(entry['input']).char('zenkaku_symbol').assert()).to.eq(entry['expect']);
+      if (!entry['expect']) {
+        expect(fa.message[0]).to.eq('char');
+      }
     });
   });
 
@@ -96,6 +132,9 @@ describe('fa.chars', function(){
     var testset = yaml.safeLoad(fs.readFileSync(TESTSET_DIR + 'alphanumeric.yml', 'utf8'));
     testset.forEach(function(entry) {
       expect(fa.set(entry['input']).char('alpha+digit').assert()).to.eq(entry['expect']);
+      if (!entry['expect']) {
+        expect(fa.message[0]).to.eq('char');
+      }
     });
   });
   

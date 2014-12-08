@@ -115,7 +115,7 @@
 
 	    if (self.allowChars.length > 0 && replaced != '') {
 	      checked = false;
-	      self.message.push('chars');
+	      self.message.push('char');
 	    }
 
 	    return checked;
